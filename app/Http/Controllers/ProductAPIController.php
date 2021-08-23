@@ -18,7 +18,7 @@ class ProductAPIController extends Controller
     public function index()
     {
         Log::debug("******** index ********");
-        $products = Product::with('options')->with('optionGroups')->get();
+        $products = Product::with('options')->with('optionGroups')->with('category')->get();
 
         Log::debug($products);
         //sleep(3);
@@ -122,7 +122,7 @@ class ProductAPIController extends Controller
         }
         
 
-        $products = Product::with('options')->with('optionGroups')->get();
+        $products = Product::with('options')->with('optionGroups')->with('category')->get();
 
         //sleep(3);
         return $this->sendResponse($products, "products api success");
