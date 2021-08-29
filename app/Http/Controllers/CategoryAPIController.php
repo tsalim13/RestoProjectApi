@@ -16,6 +16,14 @@ class CategoryAPIController extends Controller
      */
     public function index()
     {
+        $categories = Category::all();
+
+        //sleep(3);
+
+        return $this->sendResponse($categories->toArray(), "success");
+    }
+
+    public function categorywithcount() {
         $categories = Category::withCount('products')->get();
 
         //sleep(3);

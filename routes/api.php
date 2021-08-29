@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryAPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::resource('category', 'CategoryAPIController');
+Route::get('categorywithcount', 'CategoryAPIController@categorywithcount');
 
 Route::resource('product', 'ProductAPIController');
 Route::put('updateProductOptions/{id}', 'ProductAPIController@updateProductOptions');
+Route::get('categoryproducts/{categoryId}', 'ProductAPIController@categoryproducts');
 
 Route::resource('optionGroup', 'OptionGroupAPIController');
 

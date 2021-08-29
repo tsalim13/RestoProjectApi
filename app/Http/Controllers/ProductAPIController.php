@@ -25,6 +25,13 @@ class ProductAPIController extends Controller
         return $this->sendResponse($products, "products api success");
     }
 
+    public function categoryproducts($categoryId) 
+    {
+        $products = Product::where('category_id', $categoryId)->with('options')->with('optionGroups')->get();
+
+        return $this->sendResponse($products, "products api success");
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -72,7 +79,7 @@ class ProductAPIController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('options')->where('id', $id)->first();
+        $product = Product::where('id', $id)->with('options')->with('optionGroups')->first();
 
         return $this->sendResponse($product,"product api success");
     }
@@ -121,7 +128,6 @@ class ProductAPIController extends Controller
             $product->options()->sync($input['options']);
         }
         
-
         $products = Product::with('options')->with('optionGroups')->with('category')->get();
 
         //sleep(3);
