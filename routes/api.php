@@ -20,6 +20,8 @@ Route::get('categorywithcount', 'CategoryAPIController@categorywithcount');
 Route::resource('product', 'ProductAPIController');
 Route::put('updateProductOptions/{id}', 'ProductAPIController@updateProductOptions');
 Route::get('categoryproducts/{categoryId}', 'ProductAPIController@categoryproducts');
+Route::get('productbycategory/{categoryId}', 'ProductAPIController@productbycategory');
+
 
 Route::resource('optionGroup', 'OptionGroupAPIController');
 

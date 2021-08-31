@@ -32,6 +32,13 @@ class ProductAPIController extends Controller
         return $this->sendResponse($products, "products api success");
     }
 
+    public function productbycategory($categoryId) 
+    {
+        $product = Product::where('category_id', $categoryId)->with('options')->with('optionGroups')->first();
+
+        return $this->sendResponse($product, "products api success");
+    }
+
     /**
      * Show the form for creating a new resource.
      *
