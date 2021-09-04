@@ -30,6 +30,14 @@ Route::get('getOptionsWithGroup', 'OptionAPIController@getOptionsWithGroup');
 
 Route::resource('test', 'TestController');
 
+Route::resource('user', 'UserAPIController');
+Route::post('register', 'UserAPIController@register');
+Route::post('login', 'UserAPIController@login');
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('logout', 'UserAPIController@logout');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
