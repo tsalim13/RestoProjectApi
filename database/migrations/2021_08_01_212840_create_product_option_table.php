@@ -17,7 +17,7 @@ class CreateProductOptionTable extends Migration
             $table->increments('id');
             $table->integer('product_id')->unsigned();
             $table->integer('option_id')->unsigned();
-            $table->double('option_price', 8, 2)->default(0);
+            $table->integer('option_price')->default(0);
             $table->integer('min_qte')->unsigned()->default(1)->nullable();
             $table->integer('max_qte')->unsigned()->default(0)->nullable();
             $table->boolean('available')->default(1)->nullable();
