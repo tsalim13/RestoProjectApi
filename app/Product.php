@@ -31,13 +31,13 @@ class Product extends Model implements HasMedia
     protected $casts = [
         'name' => 'string',
         'image' => 'string',
-        'price' => 'double',
-        'discount_price' => 'double',
+        'price' => 'integer',
+        'discount_price' => 'integer',
         'description' => 'string',
         'capacity' => 'double',
         'unit' => 'string',
         'deliverable' => 'boolean',
-        'category_id' => 'double',
+        'category_id' => 'integer',
         'available' => 'boolean'
     ];
 
