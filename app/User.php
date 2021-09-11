@@ -51,6 +51,10 @@ class User extends Authenticatable
         //'remember_token',
     ];
 
+    public function carts() {
+        return $this->hasMany(\App\ProductCart::class);
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

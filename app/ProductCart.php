@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class ProductCart extends Model
 {
-    public $table = 'carts';
+    public $table = 'product_carts';
 
     public $fillable = [
         'product_id',
@@ -37,6 +37,6 @@ class Cart extends Model
 
     public function options()
     {
-        return $this->belongsToMany(\App\Option::class, 'cart_options');
+        return $this->belongsToMany(\App\Option::class, 'product_cart_options', 'product_cart_id', 'option_id')->withPivot('quantity')->as('quantity');
     }
 }

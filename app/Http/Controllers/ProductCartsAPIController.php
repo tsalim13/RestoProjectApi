@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Product;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\ProductCart;
 
-class TestController extends Controller
+class ProductCartsAPIController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +16,14 @@ class TestController extends Controller
      */
     public function index()
     {
-        //$product = Product::with('options')->where('id', 1)->get();
-
-        $carts = ProductCart::where('user_id', 1)->with('product.options')->with('options.optionGroup')->get();
-
-        return $this->sendResponse($carts,"product api success");
+        $userId = Auth::id();
+        Log::debug(' *************** cart *************');
+        Log::debug($userId);
+        //$carts = $user->carts()->get();
+        $carts = ProductCart::where('user_id', $userId)->with('product.options')->with('options.optionGroup')->get();
+        Log::debug($carts);
+        Sleep(8);
+        return $this->sendResponse($carts, "carts api success");
     }
 
     /**
@@ -40,7 +44,7 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Log::debug('');
     }
 
     /**

@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->integer('price')->nullable();
             $table->integer('delivery_fee')->nullable();
             $table->text('hint')->nullable();
-            $table->boolean('active')->default(1); // added
+            $table->boolean('active')->default(1);
             $table->integer('driver_id')->nullable()->unsigned();
             $table->integer('delivery_address_id')->nullable()->unsigned();
             $table->timestamps();

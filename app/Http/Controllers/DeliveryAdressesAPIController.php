@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CartsAPIController extends Controller
+class DeliveryAdressesAPIController extends Controller
 {
     /**
      * Display a listing of the resource.

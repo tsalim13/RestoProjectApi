@@ -36,6 +36,7 @@ Route::post('login', 'UserAPIController@login');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', 'UserAPIController@logout');
+    Route::resource('productCarts', 'ProductCartsAPIController');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
