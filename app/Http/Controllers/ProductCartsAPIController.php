@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
+
 use App\ProductCart;
 
 class ProductCartsAPIController extends Controller
@@ -17,12 +19,9 @@ class ProductCartsAPIController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        Log::debug(' *************** cart *************');
-        Log::debug($userId);
         //$carts = $user->carts()->get();
         $carts = ProductCart::where('user_id', $userId)->with('product.options')->with('options.optionGroup')->get();
-        Log::debug($carts);
-        Sleep(8);
+        //Sleep(8);
         return $this->sendResponse($carts, "carts api success");
     }
 
@@ -44,7 +43,21 @@ class ProductCartsAPIController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug('');
+        Log::debug(' ********************** PRODUCTORDER STORE ******************** ');
+        $input = $request->all();
+
+        Log::debug(Arr::except($input, 'options'));
+
+        $cart = ProductCart::create(Arr::except($input, 'options'));
+        Log::debug($input);
+        if ($cart->id != null) {
+            Log::debug($input['options']);
+            $cart->options()->sync($input['options']);
+            $userId = Auth::id();
+            $carts = ProductCart::where('user_id', $userId)->with('product.options')->with('options.optionGroup')->get();
+            Sleep(8);
+            return $this->sendResponse($carts, "carts api success");
+        }
     }
 
     /**

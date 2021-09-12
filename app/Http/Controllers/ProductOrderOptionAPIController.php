@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\ProductOrderOption;
 use Illuminate\Http\Request;
 
-class ProductOrderOptionController extends Controller
+class ProductOrderOptionAPIController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\OrderType;
+use App\OrderStatus;
 use Illuminate\Http\Request;
 
-class OrderTypeController extends Controller
+class OrderStatusAPIController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class OrderTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\OrderType  $orderType
+     * @param  \App\OrderStatus  $orderStatus
      * @return \Illuminate\Http\Response
      */
-    public function show(OrderType $orderType)
+    public function show(OrderStatus $orderStatus)
     {
         //
     }
@@ -52,10 +52,10 @@ class OrderTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\OrderType  $orderType
+     * @param  \App\OrderStatus  $orderStatus
      * @return \Illuminate\Http\Response
      */
-    public function edit(OrderType $orderType)
+    public function edit(OrderStatus $orderStatus)
     {
         //
     }
@@ -64,10 +64,10 @@ class OrderTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrderType  $orderType
+     * @param  \App\OrderStatus  $orderStatus
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrderType $orderType)
+    public function update(Request $request, OrderStatus $orderStatus)
     {
         //
     }
@@ -75,10 +75,10 @@ class OrderTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrderType  $orderType
+     * @param  \App\OrderStatus  $orderStatus
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderType $orderType)
+    public function destroy(OrderStatus $orderStatus)
     {
         //
     }
