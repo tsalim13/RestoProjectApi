@@ -20,7 +20,7 @@ class ProductCartsAPIController extends Controller
     {
         $userId = Auth::id();
         //$carts = $user->carts()->get();
-        $carts = ProductCart::where('user_id', $userId)->with('product.options')->with('options.optionGroup')->get();
+        $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
         //Sleep(8);
         return $this->sendResponse($carts, "carts api success");
     }
@@ -43,7 +43,7 @@ class ProductCartsAPIController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug(' ********************** PRODUCTORDER STORE ******************** ');
+        Log::debug(' ********************** PRODUCT CART STORE ******************** ');
         $input = $request->all();
 
         Log::debug(Arr::except($input, 'options'));
@@ -52,10 +52,9 @@ class ProductCartsAPIController extends Controller
         Log::debug($input);
         if ($cart->id != null) {
             Log::debug($input['options']);
-            $cart->options()->sync($input['options']);
+            $cart->optionsSync()->sync($input['options']);
             $userId = Auth::id();
-            $carts = ProductCart::where('user_id', $userId)->with('product.options')->with('options.optionGroup')->get();
-            Sleep(8);
+            $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
             return $this->sendResponse($carts, "carts api success");
         }
     }
@@ -91,7 +90,25 @@ class ProductCartsAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Log::debug(' ********************** PRODUCT CART Update ******************** ');
+        $input = $request->all();
+    }
+
+    public function updatecarts(Request $request)
+    {
+        Log::debug(' ********************** PRODUCT CART update all ******************** ');
+        $input = $request->all();
+        Log::debug($input);
+        $userId = Auth::id();
+        foreach($input as $key =>$productCart)
+        {
+            $cart = ProductCart::find($key);
+            $cart->quantity = $productCart;
+            $cart->save();
+        }
+        
+            $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+            return $this->sendResponse($carts, "carts api success");
     }
 
     /**
@@ -102,6 +119,9 @@ class ProductCartsAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        ProductCart::destroy($id);
+        $userId = Auth::id();
+        $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+            return $this->sendResponse($carts, "carts api success");
     }
 }

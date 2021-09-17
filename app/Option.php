@@ -55,6 +55,11 @@ class Option extends Model implements HasMedia
         return $this->belongsTo(\App\OptionGroup::class, 'option_group_id', 'id');
     }
 
+    public function attribute()
+    {
+        return $this->hasMany(\App\ProductOption::class);
+    }
+
     /**
      * Add Media to api results
      * @return bool

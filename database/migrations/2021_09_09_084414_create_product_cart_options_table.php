@@ -18,8 +18,10 @@ class CreateProductCartOptionsTable extends Migration
             $table->integer('option_id')->unsigned();
             $table->integer('product_cart_id')->unsigned();
             $table->integer('quantity')->unsigned()->default(1);
+            $table->integer('option_attribute_id')->unsigned();
             $table->foreign('option_id')->references('id')->on('options')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_cart_id')->references('id')->on('product_carts')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('option_attribute_id')->references('id')->on('product_option')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

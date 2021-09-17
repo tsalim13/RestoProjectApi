@@ -17,7 +17,7 @@ class TestController extends Controller
     {
         //$product = Product::with('options')->where('id', 1)->get();
 
-        $carts = ProductCart::where('user_id', 1)->with('product.options')->with('options.optionGroup')->get();
+        $carts = ProductCart::where('user_id', 1)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
 
         return $this->sendResponse($carts,"product api success");
     }

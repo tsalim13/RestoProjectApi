@@ -35,8 +35,15 @@ class ProductCart extends Model
         return $this->belongsTo(\App\User::class, 'user_id', 'id');
     }
 
+    public function optionsSync()
+    {
+        return $this->belongsToMany(\App\Option::class, 'product_cart_options', 'product_cart_id', 'option_id')->withPivot('quantity', 'option_attribute_id')->as('quantity');
+    }
+
     public function options()
     {
-        return $this->belongsToMany(\App\Option::class, 'product_cart_options', 'product_cart_id', 'option_id')->withPivot('quantity')->as('quantity');
+        return $this->hasMany(\App\ProductCartOptions::class, 'product_cart_id');
     }
+
+
 }
