@@ -38,6 +38,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', 'UserAPIController@logout');
     Route::put('updatecarts', 'ProductCartsAPIController@updatecarts');
     Route::resource('productCarts', 'ProductCartsAPIController');
+    Route::resource('address', 'DeliveryAdressesAPIController');
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
