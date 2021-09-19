@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use App\DeliveryAdresses;
 
@@ -17,7 +18,9 @@ class DeliveryAdressesAPIController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $addresses = DeliveryAdresses::where('user_id', $userId)->get()
+        $addresses = DeliveryAdresses::where('user_id', $userId)->get();
+        //Sleep(3);
+        //Log::debug($addresses);
         return $this->sendResponse($addresses, "address api success");
     }
 
@@ -45,7 +48,7 @@ class DeliveryAdressesAPIController extends Controller
         }
         $address = DeliveryAdresses::create($input);
 
-        Sleep(3);
+        //Sleep(3);
         return $this->sendResponse($address,"address api success");
     }
 
