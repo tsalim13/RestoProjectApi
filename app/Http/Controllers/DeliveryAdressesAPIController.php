@@ -94,6 +94,9 @@ class DeliveryAdressesAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DeliveryAdresses::destroy($id);
+        $userId = Auth::id();
+        $addresses = DeliveryAdresses::where('user_id', $userId)->get();
+        return $this->sendResponse($addresses, "addresses api success");
     }
 }
