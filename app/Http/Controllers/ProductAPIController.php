@@ -17,10 +17,8 @@ class ProductAPIController extends Controller
      */
     public function index()
     {
-        Log::debug("******** index ********");
         $products = Product::with('options')->with('optionGroups')->with('category')->get();
 
-        Log::debug($products);
         //sleep(3);
         return $this->sendResponse($products, "products api success");
     }
@@ -59,12 +57,6 @@ class ProductAPIController extends Controller
     {
         
         $input = $request->all();
-        // Log::debug("product");
-        // Log::debug(json_decode($input['product'], true));
-        // Log::debug("options");
-        // Log::debug(json_decode($input['options'], true));
-        // Log::debug("option group");
-        // Log::debug(json_decode($input['option_groups'], true));
 
         $product = Product::create(json_decode($input['product'], true));
         $product->options()->sync(json_decode($input['options'], true));
@@ -124,7 +116,7 @@ class ProductAPIController extends Controller
     {
         $input = $request->all();
         Log::debug("******* input updateProductOptions *******");
-        Log::debug($input);
+        Log::debug($input['options']);
         Log::debug($id);
 
         $product = Product::find($id);
