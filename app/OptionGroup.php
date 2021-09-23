@@ -31,4 +31,8 @@ class OptionGroup extends Model
     public static $rules = [
         'name' => 'required'
     ];
+
+    public function options() {
+        return $this->hasMany(\App\Option::class);
+    }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
 use App\Product;
 use App\ProductCart;
+use App\OptionGroup;
 
 class TestController extends Controller
 {
@@ -15,11 +18,14 @@ class TestController extends Controller
      */
     public function index()
     {
+        Log::debug(" **************** TEST ****************");
+
         //$product = Product::with('options')->where('id', 1)->get();
 
-        $carts = ProductCart::where('user_id', 1)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+        //$carts = ProductCart::where('user_id', 1)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
 
-        return $this->sendResponse($carts,"product api success");
+        $options = OptionGroup::with('options')->get();
+        return $this->sendResponse($options,"test api success");
     }
 
     /**
