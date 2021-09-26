@@ -23,6 +23,12 @@ class OptionGroupAPIController extends Controller
         return $this->sendResponse($optionGroup->toArray(), "success");
     }
 
+    public function groupsWithOption ()
+    {
+        $options = OptionGroup::with('options')->get();
+        return $this->sendResponse($options,"test api success");
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,9 +48,6 @@ class OptionGroupAPIController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        
-        Log::debug($request);
-        Log::debug($input);
 
         $optionGroup = OptionGroup::create($input);
 

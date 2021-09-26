@@ -115,9 +115,6 @@ class ProductAPIController extends Controller
     public function updateProductOptions(Request $request, $id)
     {
         $input = $request->all();
-        Log::debug("******* input updateProductOptions *******");
-        Log::debug($input['options']);
-        Log::debug($id);
 
         $product = Product::find($id);
 
@@ -127,10 +124,10 @@ class ProductAPIController extends Controller
             $product->options()->sync($input['options']);
         }
         
-        $products = Product::with('options')->with('optionGroups')->with('category')->get();
+        $product = Product::where('id', $id)->with('options')->with('optionGroups')->with('category')->first();
 
         //sleep(3);
-        return $this->sendResponse($products, "products api success");
+        return $this->sendResponse($product, "products api success");
     }
 
     /**

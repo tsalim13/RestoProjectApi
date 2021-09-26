@@ -24,6 +24,7 @@ Route::get('productbycategory/{categoryId}', 'ProductAPIController@productbycate
 
 
 Route::resource('optionGroup', 'OptionGroupAPIController');
+Route::get('groupsWithOption', 'OptionGroupAPIController@groupsWithOption');
 
 Route::resource('option', 'OptionAPIController');
 Route::get('getOptionsWithGroup', 'OptionAPIController@getOptionsWithGroup');
