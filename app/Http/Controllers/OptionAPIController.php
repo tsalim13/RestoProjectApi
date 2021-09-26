@@ -91,11 +91,9 @@ class OptionAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Log::debug(" ************ UPDATE OPTION ***************");
-        Log::debug($request->all());
         Option::whereId($id)->update($request->all());
         $option = Option::find($id);
-        Log::debug($option);
+        
         return $this->sendResponse($option, "option api success");
     }
 
