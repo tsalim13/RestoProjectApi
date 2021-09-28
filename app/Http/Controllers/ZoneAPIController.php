@@ -16,10 +16,10 @@ class ZoneAPIController extends Controller
      */
     public function index()
     {
-        Log::debug("************************ zones ***************************");
+        //Log::debug("************************ zones ***************************");
         $zones = Zone::orderBy('min_distance')->get();
-        Log::debug($zones);
-        Sleep(5);
+        //Log::debug($zones);
+        //Sleep(5);
         return $this->sendResponse($zones, "zone api success");
     }
 

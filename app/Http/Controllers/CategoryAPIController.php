@@ -25,9 +25,7 @@ class CategoryAPIController extends Controller
 
     public function categorywithcount() {
         $categories = Category::withCount('products')->get();
-
         //sleep(3);
-
         return $this->sendResponse($categories->toArray(), "success");
     }
 

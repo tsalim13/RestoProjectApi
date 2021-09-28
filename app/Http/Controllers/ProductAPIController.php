@@ -25,14 +25,14 @@ class ProductAPIController extends Controller
 
     public function categoryproducts($categoryId) 
     {
-        $products = Product::where('category_id', $categoryId)->with('options')->with('optionGroups')->get();
+        $products = Product::where('category_id', $categoryId)->where('available', 1)->with('options')->with('optionGroups')->get();
 
         return $this->sendResponse($products, "products api success");
     }
 
     public function productbycategory($categoryId) 
     {
-        $product = Product::where('category_id', $categoryId)->with('options')->with('optionGroups')->first();
+        $product = Product::where('category_id', $categoryId)->where('available', 1)->with('options')->with('optionGroups')->first();
 
         return $this->sendResponse($product, "products api success");
     }
