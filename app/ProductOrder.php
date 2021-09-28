@@ -27,12 +27,17 @@ class ProductOrder extends Model
 
     public function product()
     {
-        return $this->belongsTo(\App\Models\Product::class, 'product_id', 'id');
+        return $this->belongsTo(\App\Product::class, 'product_id', 'id');
     }
 
     public function options()
     {
-        return $this->belongsToMany(\App\Models\Option::class, 'product_order_options', 'product_order_id', 'option_id')
+        return $this->belongsToMany(\App\Option::class, 'product_order_options', 'product_order_id', 'option_id')
                     ->withPivot('price', 'quantity');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(\App\Order::class, 'order_id', 'id');
     }
 }
