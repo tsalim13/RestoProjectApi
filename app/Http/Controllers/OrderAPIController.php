@@ -46,7 +46,7 @@ class OrderAPIController extends Controller
      */
     public function show($id)
     {
-        $order = Order::where('id', $id)->with(['productOrders.product', 'productOrders.options.optionGroup'])->get();
+        $order = Order::where('id', $id)->with(['productOrders.product.optionGroups', 'productOrders.options.optionGroup'])->get();
         return $this->sendResponse($order, "order api success");
     }
 
