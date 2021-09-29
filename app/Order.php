@@ -18,7 +18,9 @@ class Order extends Model
         'active',
         'paid',
         'driver_id',
-        'delivery_address_id'
+        'delivery_address_id',
+        'created_at',
+        'updated_at'
     ];
 
     /**

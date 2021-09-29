@@ -33,7 +33,8 @@ class ProductOrder extends Model
     public function options()
     {
         return $this->belongsToMany(\App\Option::class, 'product_order_options', 'product_order_id', 'option_id')
-                    ->withPivot('price', 'quantity');
+                    ->withPivot('price', 'quantity')
+                    ->as('product_order_options');
     }
 
     public function order()

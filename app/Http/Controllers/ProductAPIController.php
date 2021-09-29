@@ -108,8 +108,6 @@ class ProductAPIController extends Controller
         Log::debug("input update");
         Log::debug($input);
 
-
-
     }
 
     public function updateProductOptions(Request $request, $id)
