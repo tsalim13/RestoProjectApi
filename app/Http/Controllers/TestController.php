@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\ProductCart;
 use App\OptionGroup;
+use App\User;
+use App\Order;
 
 class TestController extends Controller
 {
@@ -24,8 +26,16 @@ class TestController extends Controller
 
         //$carts = ProductCart::where('user_id', 1)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
 
-        $options = OptionGroup::with('options')->get();
-        return $this->sendResponse($options,"test api success");
+        // $user = User::find(1);
+        // Log::debug($user);
+        // $order = $user->orders()->with('')->get();
+
+        //Log::debug($order);
+
+
+        $order = Order::where('user_id', 1)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->get();
+
+        return $this->sendResponse($order, "order api success");
     }
 
     /**

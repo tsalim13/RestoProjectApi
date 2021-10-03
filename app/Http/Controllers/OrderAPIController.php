@@ -21,7 +21,11 @@ class OrderAPIController extends Controller
      */
     public function index()
     {
-        //
+        $userId = Auth::id();
+
+        $order = Order::where('user_id', $userId)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->get();
+
+        return $this->sendResponse($order, "order api success");
     }
 
     /**

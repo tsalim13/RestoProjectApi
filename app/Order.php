@@ -83,12 +83,9 @@ class Order extends Model
         return $this->hasMany(\App\ProductOrder::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     **/
-    public function products()
-    {
-        return $this->belongsToMany(\App\Product::class, 'product_orders');
-    }
+    // public function products()
+    // {
+    //     return $this->belongsToMany(\App\Product::class, 'product_orders');
+    // }
 
 }
