@@ -20,12 +20,12 @@ class CreateOrderStatusesTable extends Migration
             $table->timestamps();
         });
         
-        OrderStatus::create(["status" => 'envoyée']);
-        OrderStatus::create(["status" => 'en cours de préparation']);
-        OrderStatus::create(["status" => 'prête']);
-        OrderStatus::create(["status" => 'terminée']);
-        OrderStatus::create(["status" => 'en route']);
-        OrderStatus::create(["status" => 'livrée']);
+        OrderStatus::create(["status" => 'Envoyée']);
+        OrderStatus::create(["status" => 'En cours de préparation']);
+        OrderStatus::create(["status" => 'Prête']);
+        OrderStatus::create(["status" => 'Terminée']);
+        OrderStatus::create(["status" => 'En route']);
+        OrderStatus::create(["status" => 'Livrée']);
     }
 
     /**

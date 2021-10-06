@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\OrderType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderTypeAPIController extends Controller
 {
@@ -14,7 +15,8 @@ class OrderTypeAPIController extends Controller
      */
     public function index()
     {
-        //
+        $orderTypeStatus = OrderType::with('orderStatus')->get();
+        return $this->sendResponse($orderTypeStatus, "order api success");
     }
 
     /**

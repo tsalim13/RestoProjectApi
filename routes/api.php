@@ -37,6 +37,10 @@ Route::post('login', 'UserAPIController@login');
 
 Route::resource('zone', 'ZoneAPIController');
 
+Route::resource('orderType', 'OrderTypeAPIController');
+
+Route::get('newOrders', 'OrderAPIController@newOrders');
+
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', 'UserAPIController@logout');
     Route::put('updatecarts', 'ProductCartsAPIController@updatecarts');

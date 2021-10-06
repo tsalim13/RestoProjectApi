@@ -33,9 +33,9 @@ class TestController extends Controller
         //Log::debug($order);
 
 
-        $order = Order::where('user_id', 1)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->get();
+        $orders = Order::where('user_id', 1)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->orderBy('created_at', 'DESC')->get();
 
-        return $this->sendResponse($order, "order api success");
+        return $this->sendResponse($orders, "order api success");
     }
 
     /**
