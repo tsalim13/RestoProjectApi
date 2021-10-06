@@ -30,7 +30,7 @@ class OrderAPIController extends Controller
 
     public function newOrders()
     {
-        $orders = Order::where('order_status_id', 1)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->orderBy('created_at', 'DESC')->get();
+        $orders = Order::where('order_status_id', 1)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->orderBy('created_at', 'DESC')->get();
 
         return $this->sendResponse($orders, "order api success");
     }
