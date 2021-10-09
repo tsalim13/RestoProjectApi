@@ -23,14 +23,14 @@ class OrderAPIController extends Controller
     {
         $userId = Auth::id();
 
-        $orders = Order::where('user_id', $userId)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->orderBy('created_at', 'DESC')->get();
+        $orders = Order::where('user_id', $userId)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->orderBy('created_at', 'DESC')->get();
 
         return $this->sendResponse($orders, "order api success");
     }
 
     public function newOrders()
     {
-        $orders = Order::where('order_status_id', 1)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->orderBy('created_at', 'DESC')->get();
+        $orders = Order::where('order_status_id', 1)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->orderBy('created_at', 'DESC')->get();
 
         return $this->sendResponse($orders, "order api success");
     }
@@ -58,7 +58,7 @@ class OrderAPIController extends Controller
             // add db transaction
             DB::transaction(function() use ($request, &$order) {
                 $input = $request->all();
-                $inputOrder = $request->only('order_status_id', 'comment', 'delivery_fee', 'delivery_address_id', 'price');
+                $inputOrder = $request->only('order_status_id', 'hint', 'paid', 'active');
                 $userId = Auth::id();
                 $inputOrder['user_id'] = $userId;
                 $order = Order::create($inputOrder);
@@ -91,7 +91,7 @@ class OrderAPIController extends Controller
      */
     public function show($id)
     {
-        $order = Order::where('id', $id)->with(['productOrders.product', 'productOrders.options.optionGroup', 'orderStatus', 'driver', 'user'])->get();
+        $order = Order::where('id', $id)->with(['productOrders.product.category', 'productOrders.options.optionGroup', 'orderStatus', 'driver', 'user'])->get();
         return $this->sendResponse($order, "order api success");
     }
 
@@ -113,9 +113,22 @@ class OrderAPIController extends Controller
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, $order)
     {
         //
+    }
+
+    public function updateOrder(Request $request, $id)
+    {
+        $input = $request->all();
+        $order = Order::where('id', $id)->update($input);
+        //$inputOrder = $request->only('order_status_id', 'comment', 'delivery_fee', 'delivery_address_id', 'price');
+        // Log::debug($input);
+        // Log::debug($order);
+        $updated = Order::where('id', $id)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->first();
+        Log::debug($updated);
+        //Sleep(8);
+        return $this->sendResponse($updated, "order api success");
     }
 
     /**
