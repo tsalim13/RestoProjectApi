@@ -16,7 +16,7 @@ class OrderTypeAPIController extends Controller
     public function index()
     {
         $orderTypeStatus = OrderType::with('orderStatus')->get();
-        Sleep(8);
+        //Sleep(8);
         return $this->sendResponse($orderTypeStatus, "order api success");
     }
 

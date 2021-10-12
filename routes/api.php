@@ -40,6 +40,7 @@ Route::resource('zone', 'ZoneAPIController');
 Route::resource('orderType', 'OrderTypeAPIController');
 
 Route::get('newOrders', 'OrderAPIController@newOrders');
+Route::get('oldOrders', 'OrderAPIController@oldOrders');
 Route::put('updateOrder/{id}', 'OrderAPIController@updateOrder');
 
 Route::middleware('auth:api')->group(function () {
