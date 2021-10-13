@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\OrderStatusNotification;
 
 
 class OrderAPIController extends Controller
@@ -137,6 +139,9 @@ class OrderAPIController extends Controller
         $updated = Order::where('id', $id)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->first();
         Log::debug($updated);
         //Sleep(8);
+
+        Notification::send([$order->user], new OrderStatusNotification($order));
+
         return $this->sendResponse($updated, "order api success");
     }
 

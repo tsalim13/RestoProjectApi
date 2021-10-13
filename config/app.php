@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        Benwilkins\FCM\FcmNotificationServiceProvider::class,
 
     ],
 

@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->belongsToMany(App\Role::class);
     }
 
+    public function routeNotificationForFcm($notification)
+    {
+        return $this->device_token;
+    }
+
     /**
      * The attributes that should be cast to native types.
      *
