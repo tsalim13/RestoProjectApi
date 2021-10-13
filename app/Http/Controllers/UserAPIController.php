@@ -107,12 +107,16 @@ class UserAPIController extends Controller
     public function login(Request $request)
     {
         $input = $request->all();
+        $inputLogin = $request->only('phone', 'password');
 
         Log::debug("login");
         Log::debug($input);
-        if (auth()->attempt($input)) {
+        if (auth()->attempt($inputLogin)) {
             $api_token = auth()->user()->createToken('PassportToken@App.com')->accessToken;
 
+            $user = auth()->user();
+            $user->device_token = $input['deviceToken'];
+            $user->save();
             auth()->user()->api_token = $api_token;
             Log::debug("loged user");
             Log::debug(auth()->user());
