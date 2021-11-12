@@ -41,12 +41,12 @@ class ZoneAPIController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug("************************ zones store ***************************");
+        //Log::debug("************************ zones store ***************************");
         $input = $request->all();
         
         $zone = Zone::create($input);
-        Log::debug($zone);
-        Sleep(5);
+       // Log::debug($zone);
+        //Sleep(5);
         if($zone->id != null) {
             $zones = Zone::orderBy('min_distance')->get();
             return $this->sendResponse($zones, "zone api success");

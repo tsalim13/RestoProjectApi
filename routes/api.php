@@ -14,41 +14,77 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::resource('category', 'CategoryAPIController');
-Route::get('categorywithcount', 'CategoryAPIController@categorywithcount');
-
-Route::resource('product', 'ProductAPIController');
-Route::put('updateProductOptions/{id}', 'ProductAPIController@updateProductOptions');
-Route::get('categoryproducts/{categoryId}', 'ProductAPIController@categoryproducts');
-Route::get('productbycategory/{categoryId}', 'ProductAPIController@productbycategory');
-
-
-Route::resource('optionGroup', 'OptionGroupAPIController');
-Route::get('groupsWithOption', 'OptionGroupAPIController@groupsWithOption');
-
-Route::resource('option', 'OptionAPIController');
-Route::get('getOptionsWithGroup', 'OptionAPIController@getOptionsWithGroup');
-
 Route::resource('test', 'TestController');
 
-Route::resource('user', 'UserAPIController');
-Route::post('register', 'UserAPIController@register');
-Route::post('login', 'UserAPIController@login');
+Route::get('categorywithcount', 'CategoryAPIController@categorywithcount');
 
-Route::resource('zone', 'ZoneAPIController');
+Route::post('register', 'UserAPIController@register');
+Route::post('loginusers', 'UserAPIController@loginUsers');
+Route::post('loginstaf', 'UserAPIController@loginStaf');
 
 Route::resource('orderType', 'OrderTypeAPIController');
 
-Route::get('newOrders', 'OrderAPIController@newOrders');
-Route::get('oldOrders', 'OrderAPIController@oldOrders');
-Route::put('updateOrder/{id}', 'OrderAPIController@updateOrder');
+Route::resource('category', 'CategoryAPIController')->except([
+    'create', 'store', 'update', 'destroy'
+]);
+Route::resource('product', 'ProductAPIController')->except([
+    'create', 'store', 'update', 'destroy'
+]);
+Route::resource('optionGroup', 'OptionGroupAPIController')->except([
+    'create', 'store', 'update', 'destroy'
+]);
+Route::get('categoryproducts/{categoryId}', 'ProductAPIController@categoryproducts');
+Route::get('productbycategory/{categoryId}', 'ProductAPIController@productbycategory');
+Route::get('groupsWithOption', 'OptionGroupAPIController@groupsWithOption');
+Route::resource('option', 'OptionAPIController')->except([
+    'create', 'store', 'update', 'destroy'
+]);
+Route::get('getOptionsWithGroup', 'OptionAPIController@getOptionsWithGroup');
+Route::resource('zone', 'ZoneAPIController')->except([
+    'create', 'store', 'update', 'destroy'
+]);
+
+
+// *****************************************************************************************
 
 Route::middleware('auth:api')->group(function () {
+    Route::resource('category', 'CategoryAPIController')->only([
+        'create', 'store', 'update', 'destroy'
+    ]);
+
+    Route::resource('product', 'ProductAPIController')->only([
+        'create', 'store', 'update', 'destroy'
+    ]);
+    Route::put('updateProductOptions/{id}', 'ProductAPIController@updateProductOptions');
+    
+
+    Route::resource('optionGroup', 'OptionGroupAPIController')->only([
+        'create', 'store', 'update', 'destroy'
+    ]);
+    Route::get('groupsWithOption', 'OptionGroupAPIController@groupsWithOption');
+
+    Route::resource('option', 'OptionAPIController')->only([
+        'create', 'store', 'update', 'destroy'
+    ]);
+    Route::get('getOptionsWithGroup', 'OptionAPIController@getOptionsWithGroup');
+
+    Route::resource('user', 'UserAPIController');
+
+    Route::resource('zone', 'ZoneAPIController')->only([
+        'create', 'store', 'update', 'destroy'
+    ]);
+
+    Route::get('newOrders', 'OrderAPIController@newOrders');
+    Route::get('oldOrders', 'OrderAPIController@oldOrders');
+    Route::get('historiqueOrders', 'OrderAPIController@historiqueOrders');
+    Route::put('updateOrder/{id}', 'OrderAPIController@updateOrder');
+
+    Route::resource('order', 'OrderAPIController');
     Route::post('logout', 'UserAPIController@logout');
     Route::put('updatecarts', 'ProductCartsAPIController@updatecarts');
     Route::resource('productCarts', 'ProductCartsAPIController');
     Route::resource('address', 'DeliveryAdressesAPIController');
-    Route::resource('order', 'OrderAPIController');
+    
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {

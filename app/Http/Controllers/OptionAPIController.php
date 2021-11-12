@@ -47,7 +47,7 @@ class OptionAPIController extends Controller
     {
         $input = $request->all();
 
-        Log::debug(json_decode($input['option'], true));
+        //Log::debug(json_decode($input['option'], true));
 
         $option = Option::create(json_decode($input['option'], true));
         if ($request->hasFile('image')) {

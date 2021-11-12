@@ -48,6 +48,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'pivot'
         //'remember_token',
     ];
 
@@ -61,7 +62,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(App\Role::class);
+        return $this->belongsToMany(\App\Role::class);
     }
 
     public function routeNotificationForFcm($notification)

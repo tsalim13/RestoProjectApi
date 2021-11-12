@@ -92,7 +92,7 @@ class Category extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null)
     {
         $this->addMediaConversion('thumb')
-            ->fit(Manipulations::FIT_CROP, 500, 500)
+            ->fit(Manipulations::FIT_CROP, 900, 900)
             ->sharpen(10);
 
         $this->addMediaConversion('icon')

@@ -29,4 +29,9 @@ class Role extends Model
     public static $rules = [
         'label' => 'required'
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(\App\User::class);
+    }
 }

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 
+use Illuminate\Support\Facades\DB;
+
 use App\ProductCart;
 
 class ProductCartsAPIController extends Controller
@@ -43,20 +45,31 @@ class ProductCartsAPIController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug(' ********************** PRODUCT CART STORE ******************** ');
-        $input = $request->all();
+        $carts = null;
+        try {
+            // add db transaction
+            DB::transaction(function() use ($request, &$carts) {
+        //Log::debug(' ********************** PRODUCT CART STORE ******************** ');
+            $input = $request->all();
 
-        Log::debug(Arr::except($input, 'options'));
+            //Log::debug(Arr::except($input, 'options'));
 
-        $cart = ProductCart::create(Arr::except($input, 'options'));
-        Log::debug($input);
-        if ($cart->id != null) {
-            Log::debug($input['options']);
-            $cart->optionsSync()->sync($input['options']);
-            $userId = Auth::id();
-            $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
-            return $this->sendResponse($carts, "carts api success");
+            $cart = ProductCart::create(Arr::except($input, 'options'));
+            //Log::debug($input);
+            if ($cart->id != null) {
+                //Log::debug($input['options']);
+                $cart->optionsSync()->sync($input['options']);
+                $userId = Auth::id();
+                $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+                Log::debug($carts);
+                
+            }
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            return $this->sendError("order api error");
         }
+        return $this->sendResponse($carts, "carts api success");
     }
 
     /**
@@ -90,15 +103,15 @@ class ProductCartsAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Log::debug(' ********************** PRODUCT CART Update ******************** ');
+        //Log::debug(' ********************** PRODUCT CART Update ******************** ');
         $input = $request->all();
     }
 
     public function updatecarts(Request $request)
     {
-        Log::debug(' ********************** PRODUCT CART update all ******************** ');
+        //Log::debug(' ********************** PRODUCT CART update all ******************** ');
         $input = $request->all();
-        Log::debug($input);
+        //Log::debug($input);
         $userId = Auth::id();
         foreach($input as $key =>$productCart)
         {

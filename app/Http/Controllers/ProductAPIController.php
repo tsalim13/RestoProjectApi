@@ -105,8 +105,8 @@ class ProductAPIController extends Controller
     {
         // call index
         $input = $request->all();
-        Log::debug("input update");
-        Log::debug($input);
+       // Log::debug("input update");
+        //Log::debug($input);
 
     }
 

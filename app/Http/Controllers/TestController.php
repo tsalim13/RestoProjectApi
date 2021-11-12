@@ -5,11 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
+
+
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Carbon;
+use App\Notifications\OrderStatusNotification;
+use App\Notifications\NewOrderNotification;
+
+
 use App\Product;
 use App\ProductCart;
 use App\OptionGroup;
 use App\User;
 use App\Order;
+use App\Role;
 
 class TestController extends Controller
 {
@@ -33,9 +42,14 @@ class TestController extends Controller
         //Log::debug($order);
 
 
-        $orders = Order::where('user_id', 1)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product', 'productOrders.options'])->orderBy('created_at', 'DESC')->get();
+        // $orders = Order::where('id', 26)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->first();
 
-        return $this->sendResponse($orders, "order api success");
+        // $users = Role::where('label','admin')->first()->users()->get();
+        // Log::debug($users);
+
+        $id = Order::select('custom_id')->whereDate('created_at', Carbon::today())->latest()->get();
+
+        return $this->sendResponse($id, "order api success");
     }
 
     /**

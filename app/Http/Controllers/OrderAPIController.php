@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\ProductOrder;
 use App\ProductCart;
+use App\Role;
+use App\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Carbon;
 use App\Notifications\OrderStatusNotification;
+use App\Notifications\NewOrderNotification;
 
 
 class OrderAPIController extends Controller
@@ -25,7 +29,7 @@ class OrderAPIController extends Controller
     {
         $userId = Auth::id();
 
-        $orders = Order::where('user_id', $userId)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->orderBy('created_at', 'ASC')->get();
+        $orders = Order::where('user_id', $userId)->whereMonth('created_at', date('m'))->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->orderBy('created_at', 'ASC')->get();
 
         return $this->sendResponse($orders, "order api success");
     }
@@ -33,7 +37,7 @@ class OrderAPIController extends Controller
     public function newOrders()
     {
         $orders = Order::where('order_status_id', 1)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->orderBy('created_at', 'ASC')->get();
-
+        
         return $this->sendResponse($orders, "order api success");
     }
 
@@ -42,6 +46,15 @@ class OrderAPIController extends Controller
         $orders = Order::where('order_status_id', '!=', 1)->where('order_status_id', '!=', 6)->where('order_status_id', '!=', 4)->
                         with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])
                         ->orderBy('created_at', 'ASC')->get();
+
+        return $this->sendResponse($orders, "order api success");
+    }
+
+    public function historiqueOrders()
+    {
+        $orders = Order::where('order_status_id', '=', 6)->orWhere('order_status_id', '=', 4)->
+                        with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])
+                        ->orderBy('created_at', 'DESC')->limit(100)->get();
 
         return $this->sendResponse($orders, "order api success");
     }
@@ -69,9 +82,19 @@ class OrderAPIController extends Controller
             // add db transaction
             DB::transaction(function() use ($request, &$order) {
                 $input = $request->all();
-                $inputOrder = $request->only('order_status_id', 'hint', 'paid', 'active');
+                $inputOrder = $request->only('price', 'comment', 'delivery_fee', 'order_status_id', 'hint', 'paid', 'active', 'delivery_address_id', 'method');
                 $userId = Auth::id();
+                $lastId = Order::select('custom_id')->whereDate('created_at', Carbon::today())->latest()->get();
+                
+                if($lastId->first() != null)
+                {
+                    $lastId = $lastId->first()->custom_id != null ? $lastId->first()->custom_id : 0;
+                }
+                else {
+                    $lastId = 0;
+                }
                 $inputOrder['user_id'] = $userId;
+                $inputOrder['custom_id'] = $lastId + 1;
                 $order = Order::create($inputOrder);
                 //throw new \ErrorException('Error found');
                 foreach ($input['products'] as $productOrder) {
@@ -79,18 +102,13 @@ class OrderAPIController extends Controller
                     $result = ProductOrder::create($productOrder);
                     $result->options()->sync($productOrder['options']);
                 }
-
-                // delete user carts
-
-                // Log::debug("********** order store **********");
-                // Log::debug($input);
-                // Log::debug($inputOrder);
                 $deletedRows = ProductCart::where('user_id', $userId)->delete();
             });
         } catch (\Exception $e) {
+            Log::error($e);
             return $this->sendError("order api error");
         }
-        //Log::debug($order);
+        //Sleep(5);
         return $this->sendResponse($order, "order api success");
     }
 
@@ -102,7 +120,7 @@ class OrderAPIController extends Controller
      */
     public function show($id)
     {
-        $order = Order::where('id', $id)->with(['productOrders.product.category', 'productOrders.options.optionGroup', 'orderStatus', 'driver', 'user'])->get();
+        $order = Order::where('id', $id)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->get();
         return $this->sendResponse($order, "order api success");
     }
 
@@ -137,10 +155,10 @@ class OrderAPIController extends Controller
         // Log::debug($input);
         // Log::debug($order);
         $updated = Order::where('id', $id)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->first();
-        Log::debug($updated);
+        //Log::debug($updated);
         //Sleep(8);
 
-        Notification::send([$order->user], new OrderStatusNotification($order));
+        Notification::send([$updated->user], new OrderStatusNotification($updated));
 
         return $this->sendResponse($updated, "order api success");
     }

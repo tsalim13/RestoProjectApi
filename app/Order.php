@@ -9,7 +9,9 @@ class Order extends Model
     public $table = 'orders';
     
     public $fillable = [
+        'id',
         'user_id',
+        'custom_id',
         'order_status_id',
         'price',
         'delivery_fee',
@@ -19,6 +21,7 @@ class Order extends Model
         'paid',
         'driver_id',
         'delivery_address_id',
+        'method',
         'created_at',
         'updated_at'
     ];
@@ -30,6 +33,7 @@ class Order extends Model
      */
     protected $casts = [
         'user_id' => 'integer',
+        'custom_id' => 'integer',
         'order_status_id' => 'integer',
         'price' => 'integer',
         'delivery_fee' => 'integer',
@@ -38,7 +42,8 @@ class Order extends Model
         'active' =>'boolean',
         'paid' =>'boolean',
         'driver_id' => 'integer',
-        'delivery_address_id' => 'integer'
+        'delivery_address_id' => 'integer',
+        'method' => 'string',
     ];
 
     /**

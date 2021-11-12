@@ -89,9 +89,6 @@ class UserAPIController extends Controller
     {
         $input = $request->all();
 
-        Log::debug("register");
-        Log::debug($input);
-
         $input['password'] = bcrypt($input['password']);
 
         $user = User::create($input);
@@ -99,27 +96,51 @@ class UserAPIController extends Controller
         $api_token = $user->createToken('PassportToken@App.com')->accessToken;
 
         $user->api_token = $api_token;
-        Log::debug($user);
 
         return $this->sendResponse($user, "user api success");
     }
 
-    public function login(Request $request)
+    public function loginUsers(Request $request)
+    {
+        try {
+            $input = $request->all();
+            $inputLogin = $request->only('phone', 'password');
+
+            if (auth()->attempt($inputLogin)) {
+                // auth()->user()->tokens->each(function($token, $key) {
+                //     $token->delete();
+                // });
+                $api_token = auth()->user()->createToken('PassportToken@App.com')->accessToken;
+
+                $user = auth()->user();
+                $user->device_token = $input['deviceToken'];
+                $user->save();
+                auth()->user()->api_token = $api_token;
+
+                return $this->sendResponse(auth()->user(), "user api success");
+            }
+            return $this->sendError("user api error");
+        } catch(\Exception $e) {
+            Log::error($e);
+            return $this->sendError("user api error");
+        }
+    }
+
+    public function loginStaf(Request $request)
     {
         $input = $request->all();
-        $inputLogin = $request->only('phone', 'password');
+        $inputLogin = $request->only('email', 'password');
 
-        Log::debug("login");
-        Log::debug($input);
         if (auth()->attempt($inputLogin)) {
+            // auth()->user()->tokens->each(function($token, $key) {
+            //     $token->delete();
+            // });
             $api_token = auth()->user()->createToken('PassportToken@App.com')->accessToken;
 
             $user = auth()->user();
             $user->device_token = $input['deviceToken'];
             $user->save();
             auth()->user()->api_token = $api_token;
-            Log::debug("loged user");
-            Log::debug(auth()->user());
 
             return $this->sendResponse(auth()->user(), "user api success");
         }
@@ -127,8 +148,6 @@ class UserAPIController extends Controller
     }
 
     public function logout(Request $request) {
-        Log::debug("logout");
-        Log::debug($request->user());
         $request->user()->token()->revoke();
         $request->user()->token()->delete(); 
     }

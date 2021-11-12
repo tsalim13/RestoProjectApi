@@ -65,18 +65,18 @@ class OrderStatusNotification extends Notification
     }
 
     public function toFcm($notifiable) 
-{
-    $message = new FcmMessage();
-    $message->content([
-        'title'        => 'Choice Food',
-        'body'         => 'Votre commande #'.$this->order->id." est ".$this->order->orderStatus->status, 
-        'sound'        => '', // Optional 
-        'icon'         => '', // Optional
-        'click_action' => '' // Optional
-    ])->data([
-        //'param1' => 'baz' // Optional
-    ])->priority(FcmMessage::PRIORITY_HIGH); // Optional - Default is 'normal'.
-    
-    return $message;
-}
+    {
+        $message = new FcmMessage();
+        $message->content([
+            'title'        => 'Choice Food',
+            'body'         => 'Votre commande #'.$this->order->id." est ".$this->order->orderStatus->status, 
+            'sound'        => '', // Optional 
+            'icon'         => '', // Optional
+            'click_action' => '' // Optional
+        ])->data([
+            //'param1' => 'baz' // Optional
+        ])->priority(FcmMessage::PRIORITY_HIGH); // Optional - Default is 'normal'.
+        
+        return $message;
+    }
 }
