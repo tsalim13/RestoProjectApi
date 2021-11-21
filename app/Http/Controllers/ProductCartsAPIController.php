@@ -61,7 +61,7 @@ class ProductCartsAPIController extends Controller
                 $cart->optionsSync()->sync($input['options']);
                 $userId = Auth::id();
                 $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
-                Log::debug($carts);
+                //Log::debug($carts);
                 
             }
             });

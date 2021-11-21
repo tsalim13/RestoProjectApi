@@ -19,9 +19,39 @@ use App\OptionGroup;
 use App\User;
 use App\Order;
 use App\Role;
+use App\ProductOption;
+use App\ProductOptionGroup;
 
 class TestController extends Controller
 {
+    public function reorder() 
+    {
+        try {
+        $products = ProductOption::all();
+        
+        foreach($products as $prod) {
+            $optorder = 0;
+            $optgorder = 0;
+            $prodOpts = ProductOption::where('product_id', '=', $prod->id)->get();
+            foreach($prodOpts as $opt) {
+                $opt->order = $optorder;
+                $opt->save();
+                $optorder++;
+            }
+            $prodOptsGroups = ProductOptionGroup::where('product_id', '=', $prod->id)->get();
+            foreach($prodOptsGroups as $optg) {
+                $optg->order = $optgorder;
+                $optg->save();
+                $optgorder++;
+            }
+        }
+    } catch (\Exception $e) {
+        Log::error($e);
+        return $this->sendError("order api error");
+    }
+
+    }
+
     /**
      * Display a listing of the resource.
      *

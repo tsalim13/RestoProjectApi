@@ -59,16 +59,18 @@ class Product extends Model implements HasMedia
     public function options()
     {
         return $this->belongsToMany(\App\Option::class, 'product_option', 'product_id', 'option_id')
-                    ->withPivot('id','option_price', 'available', 'required', 'selected', 'min_qte','max_qte')
+                    ->withPivot('id','option_price', 'available', 'required', 'selected', 'min_qte','max_qte', 'order')
                     ->as('option_attribute')
-                    ->withTimestamps();
+                    ->withTimestamps()
+                    ->orderBy('product_option.order');
     }
 
     public function optionGroups()
     {
         return $this->belongsToMany(\App\OptionGroup::class, 'product_option_groups', 'product_id', 'option_group_id')
-                    ->withPivot('id', 'min_select', 'max_select')
-                    ->withTimestamps();
+                    ->withPivot('id', 'min_select', 'max_select', 'order')
+                    ->withTimestamps()
+                    ->orderBy('product_option_groups.order');
     }
 
     public function getPrice(): float

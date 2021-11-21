@@ -16,7 +16,8 @@ class ProductOption extends Model
         'max_qte',
         'available',
         'required',
-        'selected'
+        'selected',
+        'order'
     ];
 
     protected $casts = [
@@ -28,6 +29,7 @@ class ProductOption extends Model
         'available' => 'boolean',
         'required' => 'boolean',
         'selected' => 'boolean',
+        'order' => 'integer',
     ];
 
     public static $rules = [

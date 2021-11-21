@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::resource('test', 'TestController');
+Route::get('reorder', 'TestController@reorder');
 
 Route::get('categorywithcount', 'CategoryAPIController@categorywithcount');
 
