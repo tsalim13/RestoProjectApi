@@ -36,15 +36,17 @@ class OrderAPIController extends Controller
 
     public function newOrders()
     {
-        $orders = Order::where('order_status_id', 1)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])->orderBy('created_at', 'ASC')->get();
+        $orders = Order::where('order_status_id', 1)
+                        ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
+                        ->orderBy('created_at', 'ASC')->get();
         
         return $this->sendResponse($orders, "order api success");
     }
 
     public function oldOrders()
     {
-        $orders = Order::where('order_status_id', '!=', 1)->where('order_status_id', '!=', 6)->where('order_status_id', '!=', 4)->
-                        with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
+        $orders = Order::where('order_status_id', '!=', 1)->where('order_status_id', '!=', 6)->where('order_status_id', '!=', 4)
+                        ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
                         ->orderBy('created_at', 'ASC')->get();
 
         return $this->sendResponse($orders, "order api success");
@@ -52,8 +54,8 @@ class OrderAPIController extends Controller
 
     public function historiqueOrders()
     {
-        $orders = Order::where('order_status_id', '=', 6)->orWhere('order_status_id', '=', 4)->
-                        with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
+        $orders = Order::where('order_status_id', '=', 6)->orWhere('order_status_id', '=', 4)
+                        ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
                         ->orderBy('created_at', 'DESC')->limit(100)->get();
 
         return $this->sendResponse($orders, "order api success");
