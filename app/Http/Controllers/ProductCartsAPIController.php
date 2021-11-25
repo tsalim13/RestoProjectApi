@@ -22,7 +22,7 @@ class ProductCartsAPIController extends Controller
     {
         $userId = Auth::id();
         //$carts = $user->carts()->get();
-        $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+        $carts = ProductCart::where('user_id', $userId)->with(['product', 'product.optionGroups', 'options.optionAttribute', 'options.option'])->get();
         //Sleep(8);
         return $this->sendResponse($carts, "carts api success");
     }

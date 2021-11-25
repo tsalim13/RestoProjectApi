@@ -104,6 +104,9 @@ class OrderAPIController extends Controller
                     $result = ProductOrder::create($productOrder);
                     $result->options()->sync($productOrder['options']);
                 }
+                
+                $order = Order::where('id', $order->id)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])->first();
+                
                 $deletedRows = ProductCart::where('user_id', $userId)->delete();
             });
         } catch (\Exception $e) {
@@ -111,6 +114,7 @@ class OrderAPIController extends Controller
             return $this->sendError("order api error");
         }
         //Sleep(5);
+        
         return $this->sendResponse($order, "order api success");
     }
 

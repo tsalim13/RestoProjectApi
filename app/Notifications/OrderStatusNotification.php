@@ -69,7 +69,7 @@ class OrderStatusNotification extends Notification
         $message = new FcmMessage();
         $message->content([
             'title'        => 'Choice Food',
-            'body'         => 'Votre commande #'.$this->order->id." est ".$this->order->orderStatus->status, 
+            'body'         => 'Votre commande #'.$this->order->custom_id." est ".$this->order->orderStatus->status, 
             'sound'        => '', // Optional 
             'icon'         => '', // Optional
             'click_action' => '' // Optional
