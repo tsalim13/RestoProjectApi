@@ -60,7 +60,7 @@ class ProductCartsAPIController extends Controller
                 //Log::debug($input['options']);
                 $cart->optionsSync()->sync($input['options']);
                 $userId = Auth::id();
-                $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+                $carts = ProductCart::where('user_id', $userId)->with(['product', 'product.optionGroups', 'options.optionAttribute', 'options.option'])->get();
                 //Log::debug($carts);
                 
             }
@@ -120,7 +120,7 @@ class ProductCartsAPIController extends Controller
             $cart->save();
         }
         
-            $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+            $carts = ProductCart::where('user_id', $userId)->with(['product', 'product.optionGroups', 'options.optionAttribute', 'options.option'])->get();
             return $this->sendResponse($carts, "carts api success");
     }
 
@@ -134,7 +134,7 @@ class ProductCartsAPIController extends Controller
     {
         ProductCart::destroy($id);
         $userId = Auth::id();
-        $carts = ProductCart::where('user_id', $userId)->with('product')->with(['options.optionAttribute', 'options.option.optionGroup'])->get();
+        $carts = ProductCart::where('user_id', $userId)->with(['product', 'product.optionGroups', 'options.optionAttribute', 'options.option'])->get();
             return $this->sendResponse($carts, "carts api success");
     }
 }
