@@ -45,6 +45,8 @@ Route::resource('zone', 'ZoneAPIController')->except([
     'create', 'store', 'update', 'destroy'
 ]);
 
+Route::resource('settings', 'SettingsAPIController');
+
 
 // *****************************************************************************************
 
@@ -85,6 +87,9 @@ Route::middleware('auth:api')->group(function () {
     Route::put('updatecarts', 'ProductCartsAPIController@updatecarts');
     Route::resource('productCarts', 'ProductCartsAPIController');
     Route::resource('address', 'DeliveryAdressesAPIController');
+
+    Route::post('updateEnableDelivery', 'SettingsAPIController@updateEnableDelivery');
+    Route::post('updateClosed', 'SettingsAPIController@updateClosed');
     
 });
 

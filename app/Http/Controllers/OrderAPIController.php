@@ -157,13 +157,10 @@ class OrderAPIController extends Controller
     {
         $input = $request->all();
         $order = Order::where('id', $id)->update($input);
-        //$inputOrder = $request->only('order_status_id', 'comment', 'delivery_fee', 'delivery_address_id', 'price');
-        // Log::debug($input);
-        // Log::debug($order);
-        $updated = Order::where('id', $id)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->first();
-        //Log::debug($updated);
-        //Sleep(8);
 
+        $updated = Order::where('id', $id)->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])->first();
+
+        // TODO check old status and send notificaion only if old status is diffrent from new status
         Notification::send([$updated->user], new OrderStatusNotification($updated));
 
         return $this->sendResponse($updated, "order api success");
