@@ -95,8 +95,8 @@ class SettingsAPIController extends Controller
             return $this->sendError("setting api error");
         }
         //Sleep(5);
-        $set = Setting::where('key', 'closed')->first();
-        return $this->sendResponse($set, "setting api success");
+        $settings = Setting::pluck('value', 'key');
+        return $this->sendResponse($settings, "success");
     }
 
     public function updateEnableDelivery(Request $request)
@@ -109,7 +109,7 @@ class SettingsAPIController extends Controller
             return $this->sendError("setting api error");
         }
         //Sleep(5);
-        $set = Setting::where('key', 'enable_delivery')->first();
-        return $this->sendResponse($set, "setting api success");
+        $settings = Setting::pluck('value', 'key');
+        return $this->sendResponse($settings, "success");
     }
 }
