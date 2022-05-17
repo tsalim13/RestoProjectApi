@@ -25,7 +25,9 @@ class Product extends Model implements HasMedia
         'unit',
         'deliverable',
         'category_id',
-        'available'
+        'available',
+        'order',
+        'display_name'
     ];
 
     protected $casts = [
@@ -38,7 +40,9 @@ class Product extends Model implements HasMedia
         'unit' => 'string',
         'deliverable' => 'boolean',
         'category_id' => 'integer',
-        'available' => 'boolean'
+        'available' => 'boolean',
+        'order' => 'integer',
+        'display_name' => 'boolean',
     ];
 
     public static $rules = [

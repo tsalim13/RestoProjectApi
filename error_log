@@ -1,0 +1,2 @@
+[21-Dec-2021 23:08:01 UTC] PHP Fatal error:  Cannot declare class CreateUserAppinfoTable, because the name is already in use in /home/tsalim13/public_html/choicefoodServer/database/migrations/2021_12_21_195021_create_user_appinfo_table.php on line 7
+[21-Dec-2021 23:08:24 UTC] PHP Fatal error:  Cannot declare class CreateUserAppinfoTable, because the name is already in use in /home/tsalim13/public_html/choicefoodServer/database/migrations/2021_12_21_195021_create_user_appinfo_table.php on line 7

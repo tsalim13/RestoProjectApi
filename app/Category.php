@@ -19,7 +19,8 @@ class Category extends Model implements HasMedia
     public $fillable = [
         'name',
         'description',
-        'unique_product'
+        'unique_product',
+        'order'
     ];
 
     /**
@@ -31,7 +32,8 @@ class Category extends Model implements HasMedia
         'name' => 'string',
         'description' => 'string',
         'image' => 'string',
-        'unique_product' => 'boolean'
+        'unique_product' => 'boolean',
+        'order' => 'integer'
     ];
 
     /**

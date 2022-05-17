@@ -112,4 +112,19 @@ class SettingsAPIController extends Controller
         $settings = Setting::pluck('value', 'key');
         return $this->sendResponse($settings, "success");
     }
+
+    public function updateWaitingMessage(Request $request)
+    {
+        try {
+            $input = $request->all();
+            Setting::where('key', 'waiting_time')->update(['value' => $input['waiting_time']]);
+            Setting::where('key', 'message_closed')->update(['value' => $input['message_closed']]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return $this->sendError("setting api error");
+        }
+        //Sleep(5);
+        $settings = Setting::pluck('value', 'key');
+        return $this->sendResponse($settings, "success");
+    }
 }

@@ -23,6 +23,7 @@ class Order extends Model
         'driver_id',
         'delivery_address_id',
         'method',
+        'table_id',
         'created_at',
         'updated_at'
     ];
@@ -46,6 +47,7 @@ class Order extends Model
         'driver_id' => 'integer',
         'delivery_address_id' => 'integer',
         'method' => 'string',
+        'table_id' => 'integer',
     ];
 
     /**

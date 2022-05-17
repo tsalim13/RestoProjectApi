@@ -14,14 +14,16 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::resource('test', 'TestController');
-Route::get('reorder', 'TestController@reorder');
+//Route::resource('test', 'TestController');
+//Route::get('reorder', 'TestController@reorder');
 
 Route::get('categorywithcount', 'CategoryAPIController@categorywithcount');
 
 Route::post('register', 'UserAPIController@register');
 Route::post('loginusers', 'UserAPIController@loginUsers');
 Route::post('loginstaf', 'UserAPIController@loginStaf');
+
+Route::get('usersappinfos', 'UserAPIController@usersappinfos');
 
 Route::resource('orderType', 'OrderTypeAPIController');
 
@@ -49,6 +51,7 @@ Route::resource('settings', 'SettingsAPIController');
 
 
 // *****************************************************************************************
+Route::get('historiqueOrders', 'OrderAPIController@historiqueOrders');
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('category', 'CategoryAPIController')->only([
@@ -79,17 +82,24 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('newOrders', 'OrderAPIController@newOrders');
     Route::get('oldOrders', 'OrderAPIController@oldOrders');
-    Route::get('historiqueOrders', 'OrderAPIController@historiqueOrders');
+    
     Route::put('updateOrder/{id}', 'OrderAPIController@updateOrder');
 
     Route::resource('order', 'OrderAPIController');
+
     Route::post('logout', 'UserAPIController@logout');
+    Route::post('userappinfo', 'UserAPIController@userappinfo');
+
     Route::put('updatecarts', 'ProductCartsAPIController@updatecarts');
     Route::resource('productCarts', 'ProductCartsAPIController');
     Route::resource('address', 'DeliveryAdressesAPIController');
 
     Route::post('updateEnableDelivery', 'SettingsAPIController@updateEnableDelivery');
     Route::post('updateClosed', 'SettingsAPIController@updateClosed');
+    Route::post('updateWaitingMessage', 'SettingsAPIController@updateWaitingMessage');
+
+    Route::resource('tables', 'TableAPIController');
+    Route::post('tablesmulti', 'TableAPIController@multiStore');
     
 });
 

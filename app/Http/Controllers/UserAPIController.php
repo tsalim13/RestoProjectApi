@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use App\User;
+use App\UserAppInfo;
 
 class UserAPIController extends Controller
 {
@@ -150,5 +152,30 @@ class UserAPIController extends Controller
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         $request->user()->token()->delete(); 
+    }
+
+
+    public function userappinfo(Request $request)
+    {
+        try {
+            $userId = Auth::id();
+            $input = $request->all();
+            UserAppInfo::updateOrCreate(['user_id' => $userId], ['version' => $input['version']]);
+
+        } catch(\Exception $e) {
+            Log::error($e);
+        }
+    }
+    
+    public function usersappinfos()
+    {
+        try {
+            $infos = UserAppInfo::with('user')->get()->pluck('version', 'user.name');
+            return $this->sendResponse($infos, "users info api success");
+
+        } catch(\Exception $e) {
+            Log::error($e);
+            return $this->sendError("user api error");
+        }
     }
 }

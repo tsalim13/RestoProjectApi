@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-use App\Category;
+use App\Table;
 
-class CategoryAPIController extends Controller
+class TableAPIController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,17 +16,11 @@ class CategoryAPIController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $tables = Table::all();
 
-        //sleep(3);
+        //Log::debug($tables);
 
-        return $this->sendResponse($categories->toArray(), "success");
-    }
-
-    public function categorywithcount() {
-        $categories = Category::withCount('products')->orderBy('order', 'ASC')->get();
-        //sleep(3);
-        return $this->sendResponse($categories->toArray(), "success");
+        return $this->sendResponse($tables->toArray(), "success");
     }
 
     /**
@@ -49,15 +43,25 @@ class CategoryAPIController extends Controller
     {
         $input = $request->all();
 
-        $category = Category::create(json_decode($input['category'], true));
-        if ($request->hasFile('image')) {
-            $category->addMediaFromRequest('image')->toMediaCollection('Categories');
+        $table = Table::create($input);
+
+        return $this->sendResponse($table, "table api success");
+    }
+
+    public function multiStore(Request $request)
+    {
+        $input = $request->only(['count']);
+
+        if (isset($input['count'])) {
+            $count = $input['count'];
+            for ($i = 0; $i < $count; $i++) {
+                Table::create(['active' => true]);
+            }
         }
-        $category = Category::find($category->id);
 
-        //sleep(4);
+        $tables = Table::all();
 
-        return $this->sendResponse($category, "category api success");
+        return $this->sendResponse($tables->toArray(), "success");
     }
 
     /**
@@ -68,8 +72,7 @@ class CategoryAPIController extends Controller
      */
     public function show($id)
     {
-        $category = Category::find($id);
-        return $this->sendResponse($category, "category api success");
+        //
     }
 
     /**

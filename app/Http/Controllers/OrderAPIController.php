@@ -29,36 +29,43 @@ class OrderAPIController extends Controller
     {
         $userId = Auth::id();
 
-        $orders = Order::where('user_id', $userId)->whereMonth('created_at', date('m'))->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])->orderBy('created_at', 'ASC')->get();
+        $orders = Order::where('user_id', $userId)->whereMonth('created_at', date('m'))
+            ->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])
+            ->orderBy('created_at', 'ASC')->get();
 
         return $this->sendResponse($orders, "order api success");
     }
 
     public function newOrders()
     {
-        $orders = Order::where('order_status_id', 1)
-                        ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
-                        ->orderBy('created_at', 'ASC')->get();
-        
+        $orders = Order::where('order_status_id', 1)->where('active', '!=', 0)
+            ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])
+            ->orderBy('created_at', 'ASC')->get();
+
         return $this->sendResponse($orders, "order api success");
     }
 
     public function oldOrders()
     {
-        $orders = Order::where('order_status_id', '!=', 1)->where('order_status_id', '!=', 6)->where('order_status_id', '!=', 4)
-                        ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
-                        ->orderBy('created_at', 'ASC')->get();
+        $orders = Order::where('order_status_id', '!=', 1)->where('order_status_id', '!=', 6)->where('order_status_id', '!=', 4)->where('active', '!=', 0)
+            ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])
+            ->orderBy('created_at', 'ASC')->get();
 
         return $this->sendResponse($orders, "order api success");
     }
 
     public function historiqueOrders()
     {
-        $orders = Order::where('order_status_id', '=', 6)->orWhere('order_status_id', '=', 4)
-                        ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])
-                        ->orderBy('created_at', 'DESC')->limit(100)->get();
+        try {
+            $orders = Order::where('order_status_id', '=', 6)->orWhere('order_status_id', '=', 4)->orWhere('active', '=', 0)
+                ->with(['user', 'driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.options.optionGroup'])
+                ->orderBy('created_at', 'DESC')->limit(50)->get();
 
-        return $this->sendResponse($orders, "order api success");
+            return $this->sendResponse($orders, "order api success");
+        } catch (\Exception $e) {
+            Log::error($e);
+            return $this->sendError("order api error");
+        }
     }
 
     /**
@@ -82,17 +89,15 @@ class OrderAPIController extends Controller
         $order = null;
         try {
             // add db transaction
-            DB::transaction(function() use ($request, &$order) {
+            DB::transaction(function () use ($request, &$order) {
                 $input = $request->all();
                 $inputOrder = $request->only('price', 'comment', 'delivery_fee', 'order_status_id', 'hint', 'paid', 'active', 'delivery_address_id', 'method');
                 $userId = Auth::id();
                 $lastId = Order::select('custom_id')->whereDate('created_at', Carbon::today())->latest()->get();
-                
-                if($lastId->first() != null)
-                {
+
+                if ($lastId->first() != null) {
                     $lastId = $lastId->first()->custom_id != null ? $lastId->first()->custom_id : 0;
-                }
-                else {
+                } else {
                     $lastId = 0;
                 }
                 $inputOrder['user_id'] = $userId;
@@ -104,9 +109,9 @@ class OrderAPIController extends Controller
                     $result = ProductOrder::create($productOrder);
                     $result->options()->sync($productOrder['options']);
                 }
-                
+
                 $order = Order::where('id', $order->id)->with(['driver', 'orderStatus', 'deliveryAddress', 'productOrders.product.category', 'productOrders.product.optionGroups', 'productOrders.options.optionGroup'])->first();
-                
+
                 $deletedRows = ProductCart::where('user_id', $userId)->delete();
             });
         } catch (\Exception $e) {
@@ -114,7 +119,7 @@ class OrderAPIController extends Controller
             return $this->sendError("order api error");
         }
         //Sleep(5);
-        
+
         return $this->sendResponse($order, "order api success");
     }
 
