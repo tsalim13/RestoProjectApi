@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 //Route::get('reorder', 'TestController@reorder');
 
 Route::get('categorywithcount', 'CategoryAPIController@categorywithcount');
+Route::get('categoriestree', 'CategoryAPIController@categoriestree');
 
 Route::post('register', 'UserAPIController@register');
 Route::post('loginusers', 'UserAPIController@loginUsers');

@@ -20,7 +20,8 @@ class Category extends Model implements HasMedia
         'name',
         'description',
         'unique_product',
-        'order'
+        'order',
+        'parent_id'
     ];
 
     /**
@@ -33,7 +34,8 @@ class Category extends Model implements HasMedia
         'description' => 'string',
         'image' => 'string',
         'unique_product' => 'boolean',
-        'order' => 'integer'
+        'order' => 'integer',
+        'parent_id' => 'integer'
     ];
 
     /**
@@ -58,6 +60,20 @@ class Category extends Model implements HasMedia
     public function products()
     {
         return $this->hasMany(\App\Product::class, 'category_id');
+    }
+
+    public function subCategory()
+    {
+        return $this->hasMany(\App\Category::class, 'parent_id')->withCount(['products' => function ($query) {
+            $query->where('available', 1);
+        }])->orderBy('order', 'ASC');
+    }
+
+    public function subCategoryTree()
+    {
+        return $this->subCategory()->with('subCategoryTree')->withCount(['products' => function ($query) {
+            $query->where('available', 1);
+        }])->orderBy('order', 'ASC');
     }
 
     /**

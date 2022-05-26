@@ -15,7 +15,7 @@ class AddColumnTableidOrderTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->integer('table_id')->unsigned()->nullable();
-            $table->foreign('table_id')->references('id')->on('tables')->onDelete('set null')->onUpdate('cascade');
+            //$table->foreign('table_id')->references('id')->on('tables')->onDelete('set null')->onUpdate('cascade');
         });
     }
 

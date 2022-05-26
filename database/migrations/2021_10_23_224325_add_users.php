@@ -16,11 +16,11 @@ class AddUsers extends Migration
     public function up()
     {
         $user1 = User::create([
-                    'name' => 'Locale',
-                    'email' => 'locale@locale.com',
-                    'phone' => '0166666666',
-                    'password' => Hash::make('Choicefood2021')
-                ]);
+            'name' => 'Locale',
+            'email' => 'locale@locale.com',
+            'phone' => '0166666666',
+            'password' => Hash::make('Choicefood2021')
+        ]);
         $user1->createToken('PassportToken@App.com');
         $user2 = User::create([
             'name' => 'Locale',

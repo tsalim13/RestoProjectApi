@@ -23,8 +23,18 @@ class CategoryAPIController extends Controller
         return $this->sendResponse($categories->toArray(), "success");
     }
 
-    public function categorywithcount() {
+    public function categorywithcount()
+    {
         $categories = Category::withCount('products')->orderBy('order', 'ASC')->get();
+        //sleep(3);
+        return $this->sendResponse($categories->toArray(), "success");
+    }
+
+    public function categoriestree()
+    {
+        $categories = Category::whereNull('parent_id')->with('subCategoryTree')->withCount(['products' => function ($query) {
+            $query->where('available', 1);
+        }])->get();
         //sleep(3);
         return $this->sendResponse($categories->toArray(), "success");
     }
@@ -47,17 +57,22 @@ class CategoryAPIController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        $category = Category::create(json_decode($input['category'], true));
-        if ($request->hasFile('image')) {
-            $category->addMediaFromRequest('image')->toMediaCollection('Categories');
+            $category = Category::create(json_decode($input['category'], true));
+            if ($category) {
+                if ($request->hasFile('image')) {
+                    $category->addMediaFromRequest('image')->toMediaCollection('Categories');
+                }
+                $categories = Category::whereNull('parent_id')->with('subCategoryTree')->get();
+                return $this->sendResponse($categories, "category api success");
+            }
+            return $this->sendError("category api error");
+        } catch (\Exception $e) {
+            Log::error($e);
+            return $this->sendError("category api error");
         }
-        $category = Category::find($category->id);
-
-        //sleep(4);
-
-        return $this->sendResponse($category, "category api success");
     }
 
     /**
