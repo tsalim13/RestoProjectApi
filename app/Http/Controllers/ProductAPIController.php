@@ -26,8 +26,9 @@ class ProductAPIController extends Controller
     public function categoryproducts($categoryId) 
     {
         $products = Product::where('category_id', $categoryId)->where('available', 1)
-                    ->with('options')->with('optionGroups')
-                    ->orderBy('order', 'ASC')->get();
+                    //->with(['options', 'optionGroups'])
+                    ->orderBy('order', 'ASC')
+                    ->get();
 
         return $this->sendResponse($products, "products api success");
     }
